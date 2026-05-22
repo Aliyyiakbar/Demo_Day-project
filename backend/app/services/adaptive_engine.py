@@ -4,7 +4,7 @@ from datetime import datetime
 from sqlalchemy.orm import Session
 
 from app.db.models import AiQuestion, RoadmapItem, RoadmapPhase, RoadmapState
-from app.services.gemini_client import create_json_completion
+from app.services.groq_client import create_json_completion
 from app.utils.json_schema import QUESTION_SCHEMA
 
 
@@ -81,6 +81,7 @@ def generate_next_question(db: Session, student_id: int, roadmap_item_id: int, c
         answer_key=payload["question"].get("answer_key"),
         hint=payload.get("hint"),
         explanation=payload.get("explanation"),
+        source="groq",
     )
     db.add(question)
     db.flush()

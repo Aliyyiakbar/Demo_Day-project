@@ -3,7 +3,7 @@ import json
 from sqlalchemy.orm import Session
 
 from app.db.models import AiQuestion, Roadmap, RoadmapItem
-from app.services.gemini_client import create_json_completion
+from app.services.groq_client import create_json_completion
 from app.utils.json_schema import ROADMAP_SCHEMA
 
 
@@ -25,7 +25,7 @@ def _parse_json_payload(content: str) -> dict:
     try:
         return json.loads(text)
     except json.JSONDecodeError as error:
-        raise ValueError(f"Gemini returned invalid JSON: {error}") from error
+        raise ValueError(f"Groq returned invalid JSON: {error}") from error
 
 
 def _extract_items(payload: dict) -> list[dict]:
@@ -40,7 +40,7 @@ def _extract_items(payload: dict) -> list[dict]:
     if isinstance(payload.get("roadmap"), dict) and isinstance(payload["roadmap"].get("items"), list):
         return payload["roadmap"]["items"]
 
-    raise ValueError(f"Gemini returned roadmap JSON without an items list. Keys: {', '.join(payload.keys())}")
+    raise ValueError(f"Groq returned roadmap JSON without an items list. Keys: {', '.join(payload.keys())}")
 
 
 def generate_roadmap(
@@ -78,7 +78,7 @@ def generate_roadmap(
     payload = _parse_json_payload(content)
     items = _extract_items(payload)
     if not items:
-        raise ValueError("Gemini returned an empty roadmap.")
+        raise ValueError("Groq returned an empty roadmap.")
 
     roadmap = Roadmap(
         title=title,
@@ -130,7 +130,7 @@ def generate_roadmap(
                 answer_key=item.get("answer_key"),
                 explanation=item.get("explanation"),
                 hint=item.get("hint"),
-                source="teacher_gemini",
+                source="teacher_groq",
             )
         )
 

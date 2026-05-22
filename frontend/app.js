@@ -213,7 +213,7 @@ function renderAuth() {
         <div>
           <div class="brand"><span class="brand-mark">CA</span> Curricula AI</div>
           <h1>Adaptive learning for every classroom.</h1>
-          <p>Manage approvals, upload learning material, generate Gemini-powered roadmaps, and give students a focused practice workspace.</p>
+          <p>Manage approvals, upload learning material, generate Groq-powered roadmaps, and give students a focused practice workspace.</p>
         </div>
       </section>
       <section class="auth-panel">

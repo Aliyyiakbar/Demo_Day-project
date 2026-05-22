@@ -1,5 +1,6 @@
 from pathlib import Path
 
+from pydantic import AliasChoices, Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 _BACKEND_DIR = Path(__file__).resolve().parents[2]
@@ -7,7 +8,7 @@ _BACKEND_DIR = Path(__file__).resolve().parents[2]
 
 class Settings(BaseSettings):
     database_url: str = "sqlite:///./curricula_dev.db"
-    gemini_api_key: str = ""
+    groq_api_key: str = Field(default="", validation_alias=AliasChoices("GROQ_API_KEY", "GEMINI_API_KEY"))
     jwt_secret_key: str = "dev_change_me"
     jwt_algorithm: str = "HS256"
     access_token_expire_minutes: int = 60

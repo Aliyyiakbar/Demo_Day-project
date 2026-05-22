@@ -25,7 +25,7 @@ from app.schemas.assignments import RoadmapAssignRequest
 from app.schemas.attempts import SubmitAttemptRequest
 from app.schemas.roadmap import NextQuestionRequest, RoadmapGenerateRequest
 from app.services.adaptive_engine import generate_next_question
-from app.services.gemini_client import GeminiServiceError
+from app.services.groq_client import GroqServiceError
 from app.services.roadmap_generator import generate_roadmap
 
 router = APIRouter()
@@ -202,12 +202,12 @@ def create_roadmap(
     except ValueError as error:
         db.rollback()
         raise HTTPException(status_code=400, detail=str(error)) from error
-    except GeminiServiceError as error:
+    except GroqServiceError as error:
         db.rollback()
         raise HTTPException(status_code=502, detail=str(error)) from error
     except Exception as error:
         db.rollback()
-        raise HTTPException(status_code=502, detail=f"Gemini roadmap generation failed: {error}") from error
+        raise HTTPException(status_code=502, detail=f"Groq roadmap generation failed: {error}") from error
     return {"roadmap_id": roadmap_id}
 
 
